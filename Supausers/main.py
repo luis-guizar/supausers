@@ -32,9 +32,11 @@ class UserCreateRequest(BaseModel):
     email: str
     password: str
     full_name: str
-    role: str
     phone_number: str | None = None
     suscriptoruuid: str | None = None
+    puesto_uuid: str | None = None
+    rfc: str | None = None
+    status_code: int | None = None
 
 @app.post("/create-user/")
 async def create_user(user: UserCreateRequest):
@@ -45,9 +47,12 @@ async def create_user(user: UserCreateRequest):
             "password": user.password,
             "user_metadata": {
                 "full_name": user.full_name,
-                "role": user.role,
                 "phone_number": user.phone_number,
-                "suscriptoruuid": user.suscriptoruuid
+                "suscriptoruuid": user.suscriptoruuid,
+                "puesto_uuid": user.puesto_uuid,
+                "rfc":user.rfc,
+                "status_code": user.status_code
+
             }
         })
 
@@ -62,7 +67,12 @@ async def create_user(user: UserCreateRequest):
             "id": user_id,  # Same ID as auth.users
             "suscriptoruuid": user.suscriptoruuid,
             "full_name": user.full_name,
-            "phone": user.phone_number
+            "phone": user.phone_number,
+            "puesto_uuid": user.puesto_uuid,
+            "rfc":user.rfc,
+            "status_code": user.status_code,
+            "username": user.email,
+            "email": user.email,
         }
 
         profile_response = supabase.table("profiles").insert(profile_data).execute()
